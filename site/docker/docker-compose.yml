@@ -1,40 +1,17 @@
 version: '2'
 services:
-  postgresql:
-    image: 'private.registry.frontier.com/chongqing-shipping/postgres:12.2-alpine3.11'
+  monitoring:
+    image: 'docker.pkg.github.com/yuexing14/dragon-lake/show:latest'
     restart: unless-stopped
-    hostname: 'database.shipping.chongqing.frontier.unionbigdata.net'
+    hostname: 'show.dragon.yx.net'
     mem_limit: 512M
     environment:
       TZ: 'Asia/Shanghai'
-      POSTGRES_DB: shipping
-      POSTGRES_USER: shipping
-      POSTGRES_PASSWORD: 123
-    volumes:
-      - '/usr/local/shipping/database:/var/lib/postgresql/data'
     ports:
-      - '5432'
+      - '8080:80'
     networks:
       default:
         aliases:
-          - database.shipping.chongqing.frontier.unionbigdata.net
-  monitoring:
-    image: 'private.registry.frontier.com/chongqing-shipping/shipping-monitoring:latest'
-    restart: unless-stopped
-    hostname: 'monitoring.shipping.chongqing.frontier.unionbigdata.net'
-    mem_limit: 2048M
-    depends_on:
-      - postgresql
-    environment:
-      TZ: 'Asia/Shanghai'
-    volumes:
-      - '/usr/local/shipping/monitoring:/usr/local/shipping/monitoring'
-    ports:
-      - '8083:80'
-      - '7001:60000'
-    networks:
-      default:
-        aliases:
-          - monitoring.shipping.chongqing.frontier.unionbigdata.net
+          - show.dragon.yx.net
 networks:
   default:

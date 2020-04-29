@@ -1,5 +1,5 @@
 # 该镜像需要依赖的基础镜像
-FROM java:8
+FROM adoptopenjdk/openjdk11:alpine AS builder
 # 将当前目录下的jar包复制到docker容器的/目录下
 RUN find . -name *DragonShow*
 COPY show/target/generated-resources/appassembler/jsw/DragonShow/ /usr/local/DragonShow/
