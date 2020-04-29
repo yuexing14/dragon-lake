@@ -3,16 +3,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.6.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>person.yx</groupId>
+        <artifactId>dragon</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>person.yx.dragon</groupId>
-    <artifactId>show</artifactId>
+    <artifactId>dragon-show</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>show</name>
-    <description>Demo project for Spring Boot</description>
+    <name>dragon-show</name>
+    <description>a show service for dragon</description>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>11</java.version>
@@ -40,10 +41,144 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <configuration>
+                    <excludeProperties>
+                        <excludeProperty>git.build.user.*</excludeProperty>
+                        <excludeProperty>git.commit.user.*</excludeProperty>
+                    </excludeProperties>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.mysema.maven</groupId>
+                <artifactId>apt-maven-plugin</artifactId>
+                <version>${apt-maven-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.querydsl</groupId>
+                        <artifactId>querydsl-apt</artifactId>
+                        <version>${querydsl.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/generated-sources/java</outputDirectory>
+                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>normal</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <appassembler-id>DragonShow</appassembler-id>
+                <appassembler-mainClass>person.yx.dragon.show.Bootstrap</appassembler-mainClass>
+                <appassembler-memoryUsage>1G</appassembler-memoryUsage>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>appassembler-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>appassembler-maven-plugin</artifactId>
+                            <version>${appassembler-maven-plugin.version}</version>
+                            <configuration>
+                                <repositoryName>lib</repositoryName>
+                                <binFolder>bin</binFolder>
+                                <configurationDirectory>conf</configurationDirectory>
+                                <copyConfigurationDirectory>true</copyConfigurationDirectory>
+                                <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
+                                <repositoryLayout>flat</repositoryLayout>
+                                <encoding>UTF-8</encoding>
+                                <logsDirectory>logs</logsDirectory>
+                                <tempDirectory>temp</tempDirectory>
+                                <useWildcardClassPath>true</useWildcardClassPath>
+                                <externalDeltaPackDirectory>${project.basedir}/../site/wrapper
+                                </externalDeltaPackDirectory>
+                                <daemons>
+                                    <daemon>
+                                        <id>${appassembler-id}</id>
+                                        <mainClass>${appassembler-mainClass}</mainClass>
+                                        <platforms>
+                                            <platform>jsw</platform>
+                                        </platforms>
+                                        <jvmSettings>
+                                            <extraArguments>
+                                                <extraArgument>-Xmx${appassembler-memoryUsage}</extraArgument>
+                                                <extraArgument>-Xms${appassembler-memoryUsage}</extraArgument>
+                                                <extraArgument>-XX:+UnlockExperimentalVMOptions</extraArgument>
+                                                <extraArgument>-XX:+UseZGC</extraArgument>
+                                            </extraArguments>
+                                        </jvmSettings>
+                                        <generatorConfigurations>
+                                            <generatorConfiguration>
+                                                <generator>jsw</generator>
+                                                <includes>
+                                                    <include>windows-x86-32</include>
+                                                    <include>windows-x86-64</include>
+                                                    <include>linux-x86-32</include>
+                                                    <include>linux-x86-64</include>
+                                                    <include>linux-armhf-64</include>
+                                                    <include>macosx-universal-64</include>
+                                                </includes>
+                                                <configuration>
+                                                    <property>
+                                                        <name>configuration.directory.in.classpath.first</name>
+                                                        <value>%APP_BASE%/conf</value>
+                                                    </property>
+                                                    <property>
+                                                        <name>run.as.user.envvar</name>
+                                                        <value>${application.runas}</value>
+                                                    </property>
+                                                    <property>
+                                                        <name>wrapper.logfile.maxsize</name>
+                                                        <value>128m</value>
+                                                    </property>
+                                                    <property>
+                                                        <name>wrapper.logfile.maxfiles</name>
+                                                        <value>16</value>
+                                                    </property>
+                                                </configuration>
+                                            </generatorConfiguration>
+                                        </generatorConfigurations>
+                                    </daemon>
+                                </daemons>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>generate-jsw-scripts</id>
+                                    <phase>package</phase>
+                                    <goals>
+                                        <goal>generate-daemons</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 </project>

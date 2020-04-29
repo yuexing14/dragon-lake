@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Thu Jan 16 13:58:54 CST 2020
+appassembler-booter-2.1.0-armhf.jar>=
+appassembler-booter-2.1.0-armhf.pom>=
