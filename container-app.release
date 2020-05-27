@@ -1,2 +1,0 @@
-# aliyun docker build config file
-build.output=show/target/dragon-show-0.0.1-SNAPSHOT.jar
