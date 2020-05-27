@@ -86,6 +86,21 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>wrapper</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <appassembler-id>DragonShow</appassembler-id>
                 <appassembler-mainClass>person.yx.dragon.show.Bootstrap</appassembler-mainClass>

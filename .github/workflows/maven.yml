@@ -17,7 +17,7 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
       - name: Install with Maven
-        run: mvn clean install -DskipTests --file pom.xml
+        run: mvn clean install -DskipTests --file pom.xml -Pnormal
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:

@@ -1,11 +1,10 @@
 # 该镜像需要依赖的基础镜像
 FROM adoptopenjdk/openjdk11:alpine AS builder
 # 将当前目录下的jar包复制到docker容器的/目录下
-RUN find . -name *DragonShow*
-COPY show/target/generated-resources/appassembler/jsw/DragonShow/ /usr/local/DragonShow/
+COPY show/target/dragon-show-0.0.1-SNAPSHOT.jar /opt/dragon-lake/show/dragon-show-0.0.1-SNAPSHOT.jar
 # 声明服务运行在8080端口
 EXPOSE 8080
 # 指定docker容器启动时运行jar包
-ENTRYPOINT ["/usr/local/DragonShow/bin/DragonShow", "start"]
+ENTRYPOINT ["java", "-jar", "/opt/dragon-lake/show/dragon-show-0.0.1-SNAPSHOT.jar"]
 # 指定维护者的名字
 MAINTAINER yx
