@@ -5,12 +5,12 @@
     <parent>
         <groupId>person.yx</groupId>
         <artifactId>dragon</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <groupId>person.yx.dragon</groupId>
     <artifactId>dragon-show</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>dragon-show</name>
     <description>a show service for dragon</description>
     <packaging>jar</packaging>
